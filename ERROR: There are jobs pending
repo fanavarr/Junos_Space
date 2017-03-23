@@ -1,0 +1,16 @@
+Issue, space showing ERROR: There are jobs pending.
+
+Go to Space CLI, debugging mode (option 7)
+
+The following are mysql queries, they are case sensitive.
+
+> mysql -u jboss -pnetscreen build_db;
+# select * from JobInstance where moState='SCHEDULED';
+# select * from JobInstance where moState='INPROGRESS';
+# select * from JobInstance where moState='STARTING';
+# select * from JobInstance where moState='CANCELLING';
+# update JobInstance set jobStatus=4,jobState=4,scheduledStartTime=NULL,pendingJobState=NULL,pendingJobStatus=NULL,moState="CANCELLED" where moState='SCHEDULED';
+
+# select * from JobInstance where moState='SCHEDULED';
+
+Exit mysql, error should be fixed.
