@@ -1,3 +1,5 @@
+Issue: Space is out of Space.
+
 Use df -kh  on Space CLI in order to check for available disk space on partitions.
 The following data can be deleted:
       /tmp/
@@ -32,5 +34,5 @@ So lets say your db is consuming 50g, you will need 100g free on /var in order t
   # VACUUM (FULL, VERBOSE);   (this is case sensitive so..)
   (wait until it finishes and Ctrl + Z to exit)
   
-  Still full? well ad more space to the space, google < Adding Disk Resources for a Junos Space Virtual Appliance >, follow juniper official documentation toadd a new HDD.
+  Still full? well ad more space to the space, google < Adding Disk Resources for a Junos Space Virtual Appliance >, follow juniper official documentation to add a new HDD.
   Then option 6 on main CLI menu and follow the instructions.
