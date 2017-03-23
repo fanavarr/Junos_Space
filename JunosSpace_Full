@@ -1,0 +1,36 @@
+Use df -kh  on Space CLI in order to check for available disk space on partitions.
+The following data can be deleted:
+      /tmp/
+      /root/dead.letter
+      /var/cache/jboss/backup/old_backups
+      /var/log/old_logs
+      
+ Example of old logs:   if you have maillog.log, maillog.log.1 and maillog.log.2  you can safely delete maillog.log.1 and maillog.log.2
+ >   rm maillog.log.*
+ 
+Delete old opennms versions:
+    >  cd /var/lib/pgsql/
+    >  ls
+If you find there are two or more folders: 9.2 and 9.3 for example, keep the latest one and delete the rest.
+    > rm -rf 9.2
+    
+Deleting dump files (old memory, system, hardware errors)
+   > find / -name *hprof* 
+   > find / -name dead.letter
+ If you find files like these you can delete them.
+ 
+
+Vacuum process for the database.
+ 
+Finding out how big is my database:
+ > du -sh /var/lib/pgsql/version/data
+ (version could be 9.4, 9.5 etc)
+ 
+So lets say your db is consuming 50g, you will need 100g free on /var in order to proceed with the vaccum proceess (use df -kh to check)
+  > psql -U opennms
+  (password is opennms)
+  # VACUUM (FULL, VERBOSE);   (this is case sensitive so..)
+  (wait until it finishes and Ctrl + Z to exit)
+  
+  Still full? well ad more space to the space, google < Adding Disk Resources for a Junos Space Virtual Appliance >, follow juniper official documentation toadd a new HDD.
+  Then option 6 on main CLI menu and follow the instructions.
