@@ -1,4 +1,4 @@
-Issue: Loc Collector not receiving data.
+Issue: Log Collector not receiving data.
 
 Check Network settings on Space,LC and whatever is supposed to send the data eg:srx, make sure you can ping and ssh both ways.
 > route  --This will display the current network gateway for the device.
