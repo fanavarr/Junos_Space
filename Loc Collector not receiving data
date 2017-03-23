@@ -1,0 +1,37 @@
+Issue: Loc Collector not receiving data.
+
+Check Network settings on Space,LC and whatever is supposed to send the data eg:srx, make sure you can ping and ssh both ways.
+> route  --This will display the current network gateway for the device.
+> ifconfig  --To check interfaces ip address
+
+> df -kh --to check disk space, no disk space means no logs.  
+
+Tcpdump is your friend:
+
+On Log Collector:
+> tcpdump –i eth0 –vv –s 0 port 514              --check data un syslog port
+> tcpdump –i eth0 –vv –s 0 host W.X.Y.Z          --data sender IP address
+
+On Space:
+> tcpdump –i eth0 –vv –s 0 host W.X.Y.Z          --Loc Collector IP addres
+
+Traffic should be displayed if any, if do not know how to read tcpdum RTFM!.
+If not data being received from the sender device, eg:srx, check for the proper syslog / security log configuration.
+
+Checking services:
+> service elasticsearch status
+> service logstash status
+
+Checking the Log Collector config files:
+> cat /etc/hosts
+> cat /etc/sysconfig/network
+The hostname on hosts file should match the HOSTNAME value on network file.
+> cat /etc/elasticsearch/elasticsearch.yml
+Make sure the log collector IP address is on line http.basic.ipwhitelist: ["localhost", "127.0.0.1"]
+eg: http.basic.ipwhitelist: ["localhost", "127.0.0.1", W.X.Y.Z"] 
+
+Restart of services:
+> service elasticsearch stop
+> service logstash stop
+> service elasticsearch start
+> service logstash start
