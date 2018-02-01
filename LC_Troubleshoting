@@ -58,13 +58,16 @@ curl -XGET 127.0.0.1:9200/_cluster/health?pretty
 ---------------------------------------------------------
 
 curl -XGET 'http://localhost:9200/_cat/indices?v' | grep red
-curl -XGET 'http://localhost:9200/_cat/indices?v'|grep ^red|grep junoslogs|cut -c15-| cut -d " " -f1 > /tmp/logs 
-cat /tmp/logs | while read N; do curl -XDELETE "http://localhost:9200/$N"; done
+If you find any logs in 'red' state, then we need to delete them by using the below command on each corrupted log:  
+ 
+curl -XDELETE 'http://localhost:9200/junoslogs-2016.xx.xx-xx' 
+
+You can delete them all at once with the following commands in this order only: 
+curl -XGET 'http://localhost:9200/_cat/indices?v'|grep ^red|grep junoslogs|cut -c15-| cut -d " " -f1 > /tmp/logs  
+cat /tmp/logs | while read N; do curl -XDELETE "http://localhost:9200/$N"; done 
+
 
 If this does not work, red indices can be manually deleted on:
 
 /var/cache/ecm_logcollector/log-collector/nodes/0/indices  -----> Integrated log collector
 /var/lib/elasticsearch/log-collector/nodes/0/indices
-
-
-
