@@ -1,0 +1,13 @@
+On Junos Space CLI:
+
+The following are mysql queries, they are case sensitive.
+
+> mysql -u jboss -pnetscreen build_db;
+1) # select * from JobInstance where moState='SCHEDULED';
+2) # select * from JobInstance where moState='INPROGRESS';
+3) # select * from JobInstance where moState='STARTING';
+4) # select * from JobInstance where moState='CANCELLING';
+5) # update JobInstance set jobStatus=4,jobState=4,scheduledStartTime=NULL,pendingJobState=NULL,pendingJobStatus=NULL,moState="CANCELLED" where moState='SCHEDULED';
+6) # select * from JobInstance where moState='SCHEDULED';
+
+Note: change SCHEDULED by any of the other jobs states on step 5.
