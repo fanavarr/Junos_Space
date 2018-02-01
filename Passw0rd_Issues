@@ -1,0 +1,38 @@
+
+------------------------------------------
+--------- Account block by IP ------------
+------------------------------------------
+
+1) Access Junos Space from other IP address.
+2) Go to: Platform > Manage Users
+3) Right-click on user and choose "Enable Locked out User"
+
+---------------------------------------
+--------- Account is Lock -------------
+---------------------------------------
+
+# mysql -u jboss -pnetscreen build_db
+> select * from USER_IP_ADDRESS; 
+> update USER_IP_ADDRESS set isLocked=0; 
+
+or
+
+> select * from USER where name = 'super';
+> update USER set isLocked = 0 where name = 'super';
+> quit
+
+---------------------------------------------
+-------- Change admin Password --------------
+---------------------------------------------
+
+I cant remember my admin CLI password: 
+
+[KB30506] How to reset the CLI admin password on a Junos Space: https://kb.juniper.net/InfoCenter/index?page=content&id=KB30506  
+
+
+---------------------------------------------------
+-------- To Change Maintenance password -----------
+---------------------------------------------------
+
+on Space CLI:
+> htpasswd -sb /var/www/maintenance/maintPW maintenance jnpr123!
