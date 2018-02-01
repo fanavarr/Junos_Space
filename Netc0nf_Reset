@@ -1,0 +1,16 @@
+Enter mysql Database:
+
+mysql -u jboss -pnetscreen build_db
+
+Reset for all devices:
+
+update DeviceConnectionStatus set connStatus=0 where connStatus = "1";
+
+Reset for a single device:
+
+select id, hostname from LogicalDevice;  
+select device_id_id, connStatus from DeviceConnectionStatus; 
+update DeviceConnectionStatus set connStatus=0 where device_id_id="xxx";  
+
+
+Space will mark the devices as down and will initiate a new connection 
