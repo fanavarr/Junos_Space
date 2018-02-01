@@ -1,0 +1,19 @@
+Step 1 : 
+mysql -u jboss -pnetscreen build_db; 
+select * from SchemaEntity  where deviceFamily='junos-es'; 
+select * from DmiSchemaEntity where deviceFamily='junos-es'; 
+From above steps note down the ID's of the schema Version used by the affected device. 
+  
+Step 2 : 
+delete from SchemaEntity where id=; 
+delete from DmiSchemaEntity where id= ; 
+In above steps add id's noted in previous step 1 
+  
+Step 3 : 
+Delete specific version of schema from the file system. 
+Location in filesystem is - 
+ /usr/local/jboss/jmp-tmp/net/juniper/jmp/var/schemas/dmi-nsm/admonly/ 
+/usr/local/jboss/jmp-tmp/net/juniper/jmp/var/schemas/dmi-space/dmi/junos-es/releases/ 
+  
+Step 4 : 
+Reinstall schema from the WebUI and perform a device resync. 
