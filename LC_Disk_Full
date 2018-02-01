@@ -1,0 +1,37 @@
+--------------------------------------
+---- Find Top 50 biggest files -------
+--------------------------------------
+
+> find / -xdev -type f -printf '%s %p\n'| sort -nr | head -50    
+
+----------------------------------------
+----- Deleting Diskrollover logs  ------
+----------------------------------------
+
+> find / -name Diskrollover.log             
+> find / -name Diskrollover.log.backup 
+
+-----------------------------------------
+------ Check Duplicate Nodes ------------
+-----------------------------------------
+
+> cd /var/lib/elasticsearch/log-collector/nodes 
+(there should be only node 0, if node 1 exists, move the files to node 0 and delete node 1)
+> restart services
+
+-----------------------------------------
+----- Check The Number of Shards --------
+-----------------------------------------
+
+Modify index.number_of_shards from 2 to 1 on /etc/elasticsearch/elasticsearch.yml
+
+-----------------------------------------
+--------- Run DiskRollover --------------
+-----------------------------------------
+
+> sh /opt/jnpr/bin/elasticDiskRollover.sh
+Check crontab -l, DiskRollover.sh should be listed:
+Default is:
+00 */1 * * * sh /opt/jnpr/bin/elasticDiskRollover.sh > /dev/null
+
+Note: Modify disk limit on /opt/jnpr/etc/elasticDiskRollover.cfg  (diskSpace=400.0  => Size based  $ olderThan=45 => Day Based (Default value: 45 days). 
