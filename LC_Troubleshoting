@@ -1,0 +1,70 @@
+Issue: Log Collector not receiving data.
+
+Check Network settings on Space,LC and whatever is supposed to send the data eg:srx, make sure you can ping and ssh both ways.
+> route  --This will display the current network gateway for the device.
+> ifconfig  --To check interfaces ip address
+> df -kh --to check disk space, no disk space means no logs.  
+
+------------------------------------------------------
+--------------- Tcpdump Data Flow Check -------------- 
+-------------------------------------------------------
+
+On Log Collector:
+> tcpdump –i eth0 –vv –s 0 port 514              --check data un syslog port
+> tcpdump –i eth0 –vv –s 0 host W.X.Y.Z          --data sender IP address
+
+On Space:
+> tcpdump –i eth0 –vv –s 0 host W.X.Y.Z          --Log Collector IP addres
+
+---------------------------------------------------------
+---------------- Checking Services ----------------------
+---------------------------------------------------------
+
+> service elasticsearch status
+> service logstash status
+> service jingest status
+
+--------------------------------------------------------------------------------------------
+-------------- Checking the Log Collector config files: ------------------------------------
+--------------------------------------------------------------------------------------------
+
+> cat /etc/hosts
+> cat /etc/sysconfig/network
+The hostname on hosts file should match the HOSTNAME value on network file.
+> cat /etc/elasticsearch/elasticsearch.yml
+Make sure the log collector IP address is on line http.basic.ipwhitelist: ["localhost", "127.0.0.1"]
+eg: http.basic.ipwhitelist: ["localhost", "127.0.0.1", W.X.Y.Z"] 
+
+
+--------------------------------------------------------
+--------------- Service Restart ------------------------
+--------------------------------------------------------
+
+> service elasticsearch stop
+> service logstash stop
+> service elasticsearch start
+> service logstash start
+> service jingest stop
+> service jingest start
+
+------------------------------------------
+--------- Check Health -------------------
+------------------------------------------
+
+curl -XGET 127.0.0.1:9200/_cluster/health?pretty
+
+---------------------------------------------------------
+--------- Check and Delete Red Indices ------------------
+---------------------------------------------------------
+
+curl -XGET 'http://localhost:9200/_cat/indices?v' | grep red
+curl -XGET 'http://localhost:9200/_cat/indices?v'|grep ^red|grep junoslogs|cut -c15-| cut -d " " -f1 > /tmp/logs 
+cat /tmp/logs | while read N; do curl -XDELETE "http://localhost:9200/$N"; done
+
+If this does not work, red indices can be manually deleted on:
+
+/var/cache/ecm_logcollector/log-collector/nodes/0/indices  -----> Integrated log collector
+/var/lib/elasticsearch/log-collector/nodes/0/indices
+
+
+
